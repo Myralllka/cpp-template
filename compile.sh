@@ -4,10 +4,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-mkdir -p bin build
+mkdir -p build
 (
-  cd build
-  cmake -G"Unix Makefiles" ..
-  make
+    cd build 
+    cmake ..
+    make
 )
 #rm -r build
