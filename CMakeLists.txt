@@ -9,13 +9,16 @@ set(CMAKE_CXX_STANDARD 17)
 option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." ON)
 option(ENABLE_SANITIZERS "Use sanitizers to detect errors." ON)
 option(ENABLE_CONAN "Use Conan as a package manager." OFF)
+option(ENABLE_PVS_STUDIO "Check using command-line PVS-Studio." ON)
 
 # Set output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 
 ## PVS Studio
-include(cmake/PVS-Studio.cmake)
+if(ENABLE_PVS_STUDIO)
+include(PVS-Studio.cmake)
 SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+endif()
 
 # Include fixed CMake configuration
 include(cmake/config.cmake)
@@ -46,9 +49,14 @@ endif ()
 
 #####################################
 # create own target for library
-pvs_studio_add_target(TARGET ${PROJECT_NAME}.analyze ALL
-        ANALYZE ${PROJECT_NAME}
-        OUTPUT FORMAT errorfile
-        MODE GA:1,2,3 OP:1,2,3 GA:1,2,3 OP:1,2,3 64:1,2,3 CS:1,2,3 MISRA:1,2,3
-        LOG target_${PROJECT_NAME}.err)
+if(ENABLE_PVS_STUDIO)
+    # create own target for library
+    pvs_studio_add_target(TARGET ${PROJECT_NAME}.analyze ALL
+            ANALYZE ${PROJECT_NAME}
+            OUTPUT FORMAT errorfile
+            MODE GA:1,2,3 OP:1,2,3 GA:1,2,3 OP:1,2,3 64:1,2,3 CS:1,2,3 MISRA:1,2,3
+            LOG target_${PROJECT_NAME}.err)
+else()
+    message("Consider checking using PVS-Studio with `cmake -DENABLE_PVS_STUDIO=ON <.....>` or Windows GUI application.")
+endif()
 #####################################
