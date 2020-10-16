@@ -20,6 +20,9 @@ include(PVS-Studio.cmake)
 SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 
+# Warnings
+add_compile_options(-Wall -Wextra -pedantic -Werror -Werror=vla)
+
 # Include fixed CMake configuration
 include(cmake/config.cmake)
 
