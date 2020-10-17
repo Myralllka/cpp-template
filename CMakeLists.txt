@@ -16,7 +16,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 
 ## PVS Studio
 if(ENABLE_PVS_STUDIO)
-include(PVS-Studio.cmake)
+include(cmake/PVS-Studio.cmake)
 SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 
