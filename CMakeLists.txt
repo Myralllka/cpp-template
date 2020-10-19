@@ -14,15 +14,14 @@ option(ENABLE_PVS_STUDIO "Check using command-line PVS-Studio." ON)
 # Set output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 
-## PVS Studio
-if(ENABLE_PVS_STUDIO)
-include(cmake/PVS-Studio.cmake)
-SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-endif()
-
 # Warnings
-add_compile_options(-Wall -Wextra -pedantic -Werror -Werror=vla)
-
+if (MSVC)
+    # warning level 4 and all warnings as errors
+    add_compile_options(/W4 /WX)
+else()
+    # lots of warnings and all warnings as errors
+    add_compile_options(-Wall -Wextra -pedantic -Werror -Werror=vla)
+endif()
 # Include fixed CMake configuration
 include(cmake/config.cmake)
 
@@ -53,6 +52,8 @@ endif ()
 #####################################
 # create own target for library
 if(ENABLE_PVS_STUDIO)
+    include(cmake/PVS-Studio.cmake)
+    SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
     # create own target for library
     pvs_studio_add_target(TARGET ${PROJECT_NAME}.analyze ALL
             ANALYZE ${PROJECT_NAME}
